@@ -1,12 +1,11 @@
 service: product-service
-frameworkVersion: '2'
-variablesResolutionMode: 20210219
+frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   stage: ${opt:stage, 'dev'}
-  region: us-east-1
+  region: eu-west-1
   environment:
     ENV_STAGE: ${opt:stage, 'dev'}
     PGHOST: ${self:custom.dotenvVars.PGHOST, env:PGHOST, ''}
@@ -17,6 +16,7 @@ provider:
 
 plugins:
   - serverless-webpack
+  - serverless-auto-swagger
 
 custom:
   webpack:
@@ -53,3 +53,15 @@ functions:
           request:
               schema:
                 application/json: ${file(src/schemas/createProductSchema.json)}
+
+resources:
+  Resources:
+    GatewayResponseDefault4XX:
+      Type: 'AWS::ApiGateway::GatewayResponse'
+      Properties:
+        ResponseParameters:
+          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+        ResponseType: DEFAULT_4XX
+        RestApiId:
+          Ref: 'ApiGatewayRestApi'

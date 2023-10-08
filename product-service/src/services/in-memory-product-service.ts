@@ -1,8 +1,8 @@
 import { ProductServiceInterface, ProductInterface } from './products';
 import products from './products-data.json';
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
-class InMemoryProductService implements ProductServiceInterface {
+export default class InMemoryProductService implements ProductServiceInterface {
     getProductById(id: string) {
         return Promise.resolve(products.find( product => product.id === id ));
     }
@@ -19,5 +19,3 @@ class InMemoryProductService implements ProductServiceInterface {
         return Promise.resolve(products[products.length - 1]);
     }
 }
-
-export { InMemoryProductService };

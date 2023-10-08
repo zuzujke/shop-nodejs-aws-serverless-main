@@ -1,7 +1,7 @@
 import { ProductServiceInterface, ProductInterface } from './products';
 import { Client, QueryConfig } from 'pg';
 
-class PostgresProductService implements ProductServiceInterface {
+export default class PostgresProductService implements ProductServiceInterface {
 
     private tableName = 'products';
 
@@ -36,5 +36,3 @@ class PostgresProductService implements ProductServiceInterface {
         return result.rows[0] ? result.rows[0] : null;
     }
 }
-
-export { PostgresProductService };

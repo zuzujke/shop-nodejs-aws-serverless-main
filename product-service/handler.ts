@@ -1,13 +1,24 @@
 import * as handlers from './src';
-import { Client } from 'pg';
-import { PostgresProductService } from './src/services/postgres-memory-product-service';
+// import { Client } from 'pg';
+// import PostgresProductService from './src/services/postgres-memory-product-service';
+import InMemoryProductService from './src/services/in-memory-product-service';
 
-console.log(process.env);
+// const databaseClient = new Client();
 
-const databaseClient = new Client();
-databaseClient.connect();
-const productService = new PostgresProductService(databaseClient)
+// TODO in further tasks
+// databaseClient.connect()
+//   .then(() => {
+//     console.log('Connected to the database');
+//   })
+//   .catch((err) => {
+//     console.error('Error connecting to the database:', err);
+//     process.exit(1);
+//   });
+// const productService = new PostgresProductService(databaseClient);
 
-export const getProductById = handlers.getProductByIdHandler(productService);
-export const getAllProducts = handlers.getAllProductsHandler(productService);
-export const createProduct = handlers.createProductHandler(productService);
+const mockProductService = new InMemoryProductService();
+
+export const getProductById = handlers.getProductByIdHandler(mockProductService);
+export const getAllProducts = handlers.getAllProductsHandler(mockProductService);
+// TODO: in further tasks
+// export const createProduct = handlers.createProductHandler(productService);

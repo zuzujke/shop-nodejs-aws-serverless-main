@@ -12,8 +12,7 @@ export const getProductByIdHandler = (productService: ProductServiceInterface) =
   try {
     winstonLogger.logRequest(`Incoming event: ${JSON.stringify(event)}`);
 
-    const { productId = '' } = event.pathParameters;
-
+    const { productId } = event.pathParameters || {};
     if (!productId) {
       winstonLogger.logError("Product ID is missing or invalid.");
     }
@@ -23,11 +22,11 @@ export const getProductByIdHandler = (productService: ProductServiceInterface) =
     if (product) {
       winstonLogger.logRequest(`Received product with id: ${productId}: ${JSON.stringify(product)}`);
       return successResponse({ product });
+    } else {
+      winstonLogger.logError(`Product with id ${productId} not found.`);
     }
-
-    winstonLogger.logError("404: Product not found");
-  } catch (err) {
-    winstonLogger.logError(`Error: ${err.stack}`);
-    return errorResponse(err);
+  } catch (error) {
+    winstonLogger.logError(`Error: ${error.stack}`);
+    return errorResponse(error);
   }
-}
+};

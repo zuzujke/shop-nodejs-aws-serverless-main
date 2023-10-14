@@ -1,12 +1,5 @@
-export interface ProductInterface {
+export interface ProductInterface extends StockInterface {
     id: string,
-    title: string,
-    description: string,
-    price: number,
-    logo: string,
-}
-
-export interface ProductInterface {
     title: string,
     description: string,
     price: number,

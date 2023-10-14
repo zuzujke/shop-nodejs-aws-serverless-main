@@ -3,7 +3,6 @@ export interface ProductInterface extends StockInterface {
     title: string,
     description: string,
     price: number,
-    logo: string,
 }
 
 export interface StockInterface {

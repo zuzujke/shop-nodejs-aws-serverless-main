@@ -63,7 +63,7 @@ export default class DynamodbProductService implements ProductServiceInterface {
     }
   }
 
-  async create(product: Pick<ProductInterface, 'id' | 'title' | 'description' | 'price' | 'logo' | 'count' | 'product_id'>): Promise<ProductInterface | null> {
+  async create(product: Pick<ProductInterface, 'id' | 'title' | 'description' | 'price' | 'count' | 'product_id'>): Promise<ProductInterface | null> {
     const params = {
       TableName: this.tableName,
       Item: {
@@ -71,7 +71,6 @@ export default class DynamodbProductService implements ProductServiceInterface {
         title: product.title,
         description: product.description,
         price: product.price,
-        logo: product.logo,
       },
     };
 

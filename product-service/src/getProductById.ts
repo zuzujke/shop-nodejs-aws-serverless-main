@@ -12,7 +12,8 @@ export const getProductByIdHandler = (productService: ProductServiceInterface) =
   try {
     winstonLogger.logRequest(`Incoming event: ${JSON.stringify(event)}`);
 
-    const { productId } = event.pathParameters || {};
+    const { productId = '' } = event.pathParameters;
+
     if (!productId) {
       winstonLogger.logError("Product ID is missing or invalid.");
     }

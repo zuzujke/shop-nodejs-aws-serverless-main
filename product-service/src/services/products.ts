@@ -11,7 +11,7 @@ export interface StockInterface {
 }
 
 export interface ProductServiceInterface {
-  getProductById: (id: string) => Promise<ProductInterface>,
+  getProductById: (productId: string) => Promise<ProductInterface>,
   getStockByProductId: (id: string) => Promise<StockInterface>,
   getAllProducts: () => Promise<ProductInterface[]>,
   create: (product: Omit<ProductInterface, 'id'>) => Promise<ProductInterface>,

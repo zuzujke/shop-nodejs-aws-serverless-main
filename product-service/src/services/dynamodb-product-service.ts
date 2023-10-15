@@ -10,11 +10,11 @@ export default class DynamodbProductService implements ProductServiceInterface {
     this.dynamoDBClient = new AWS.DynamoDB.DocumentClient();
   }
 
-  async getProductById(id: string): Promise<ProductInterface | null> {
+  async getProductById(productId: string): Promise<ProductInterface | null> {
     const params = {
       TableName: this.tableName,
       Key: {
-        id,
+        id: productId,
       },
     };
 

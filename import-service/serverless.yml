@@ -1,24 +1,25 @@
 service: import-service
-frameworkVersion: '2'
-variablesResolutionMode: 20210219
-
+frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs12.x
+  runtime: nodejs16.x
   stage: ${opt:stage, 'dev'}
-  region: us-east-1
+  region: eu-west-1
 
   iamRoleStatements:
     - Effect: "Allow"
-      Action: "s3:ListBucket"
+      Action:
+        - "s3:ListBucket"
+        - "s3:GetObject"
+        - "s3:PutObject"
       Resource:
-        - "arn:aws:s3:::node-in-aws-cloud-catalogs"
+        - "arn:aws:s3:::import-service-csv-uploaded"
     - Effect: "Allow"
       Action:
         - "s3:*"
       Resource:
-        - "arn:aws:s3:::node-in-aws-cloud-catalogs/*"
+        - "arn:aws:s3:::import-service-uploads/*"
 
 plugins:
   - serverless-webpack
@@ -32,6 +33,8 @@ custom:
 functions:
   importProductsFile:
     handler: handler.importProductsFile
+    environment:
+      BUCKET: "import-service-uploads"
     events:
       - http:
           path: import
@@ -44,7 +47,10 @@ functions:
 
   importFileParser:
     handler: handler.importFileParser
+    events:
       - s3:
-          bucket: uploaded
+          bucket: import-service-uploads
           event: s3:ObjectCreated:*
+          rules:
+            - prefix: products/
           existing: true

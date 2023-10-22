@@ -3,12 +3,12 @@ import { winstonLogger } from "./utils/winstonLogger";
 import { errorResponse, successResponse } from "./utils/apiResponseBuilder";
 
 /**
- * Lambda handler for retrieving a product by ID.
+ * Lambda handler for retrieving stock data by product ID.
  *
  * @param {ProductServiceInterface} productService - An instance of the ProductService.
  * @returns {Promise} - A promise that resolves with the API response.
  */
-export const getProductByIdHandler = (productService: ProductServiceInterface) => async (event, _context) => {
+export const getStockByProductIdHandler = (productService: ProductServiceInterface) => async (event, _context) => {
   try {
     winstonLogger.logRequest(`Incoming event: ${JSON.stringify(event)}`);
 
@@ -18,16 +18,16 @@ export const getProductByIdHandler = (productService: ProductServiceInterface) =
       winstonLogger.logError("Product ID is missing or invalid.");
     }
 
-    const product = await productService.getProductById(productId);
+    const stock = await productService.getStockByProductId(productId);
 
-    if (product) {
-      winstonLogger.logRequest(`Received product with id: ${productId}: ${JSON.stringify(product)}`);
-      return successResponse({ product });
-    } else {
-      winstonLogger.logError(`Product with id ${productId} not found.`);
+    if (stock) {
+      winstonLogger.logRequest(`Received stock data for product with ID ${productId}: ${JSON.stringify(stock)}`);
+      return successResponse({ stock });
     }
+
+    winstonLogger.logError(`404: Stock data not found for product with ID ${productId}`);
   } catch (error) {
     winstonLogger.logError(`Error: ${error.stack}`);
     return errorResponse(error);
   }
-};
+}

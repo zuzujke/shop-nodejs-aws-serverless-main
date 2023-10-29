@@ -4,10 +4,10 @@ import AWS from 'aws-sdk';
 const BUCKET = process.env.BUCKET;
 const SQS_QUEUE_URL = process.env.SQS_QUEUE_URL;
 
-const s3 = new AWS.S3();
+const s3 = new AWS.S3({ region: 'eu-west-1' });
 const sqs = new AWS.SQS();
 
-export const importFileParser = async (event) => {
+export const importFileParserHandler = async (event) => {
   const promises = event.Records.map(async (record) => {
     const s3Stream = s3.getObject({
       Bucket: BUCKET,

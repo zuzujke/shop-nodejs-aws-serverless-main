@@ -7,7 +7,7 @@ const SQS_QUEUE_URL = process.env.SQS_QUEUE_URL;
 const s3 = new AWS.S3();
 const sqs = new AWS.SQS();
 
-export const importFileParserHandler = async (event) => {
+export const importFileParser = async (event) => {
   const promises = event.Records.map(async (record) => {
     const s3Stream = s3.getObject({
       Bucket: BUCKET,

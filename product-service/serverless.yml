@@ -52,7 +52,17 @@ functions:
           cors: true
           request:
               schema:
-                application/json: ${file(src/schemas/createProductSchema.json)}
+              application/json: ${file(src/schemas/createProductSchema.json)}
+
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - CatalogItemsQueue
+              - Arn
+          batchSize: 5
 
 resources:
   Resources:
@@ -92,3 +102,32 @@ resources:
                   Resource:
                     - arn:aws:dynamodb:eu-west-1:958195610435:table/products
                     - arn:aws:dynamodb:eu-west-1:958195610435:table/stocks
+
+    CatalogItemsQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: catalogItemsQueue
+
+    CatalogBatchProcessQueuePolicy:
+      Type: "AWS::SQS::QueuePolicy"
+      Properties:
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: "Allow"
+              Principal:
+                Service:
+                  AWS: "*"
+              Action: "sqs:*"
+              Resource:
+                Fn::GetAtt:
+                  - CatalogItemsQueue
+                  - Arn
+              Condition:
+                ArnEquals:
+                  aws:SourceArn:
+                    Fn::GetAtt:
+                      - CatalogItemsQueue
+                      - Arn
+        Queues:
+          - !GetAtt CatalogItemsQueue.Arn

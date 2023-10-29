@@ -35,6 +35,7 @@ functions:
     handler: handler.importProductsFile
     environment:
       BUCKET: "import-service-uploads"
+      SQS_QUEUE_URL: "catalogItemsQueue"
     events:
       - http:
           path: import

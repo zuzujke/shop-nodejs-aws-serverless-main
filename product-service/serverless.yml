@@ -52,7 +52,17 @@ functions:
           cors: true
           request:
               schema:
-                application/json: ${file(src/schemas/createProductSchema.json)}
+              application/json: ${file(src/schemas/createProductSchema.json)}
+
+  catalogBatchProcess:
+    handler: handler.catalogBatchProcess
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - CatalogItemsQueue
+              - Arn
+          batchSize: 5
 
 resources:
   Resources:
@@ -92,3 +102,25 @@ resources:
                   Resource:
                     - arn:aws:dynamodb:eu-west-1:958195610435:table/products
                     - arn:aws:dynamodb:eu-west-1:958195610435:table/stocks
+
+    CatalogItemsQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: catalogItemsQueue
+    createProductTopic:
+      Type: "AWS::SNS::Topic"
+      Properties:
+        TopicName: "create-product-topic"
+    createProductTopicSubscription:
+      Type: "AWS::SNS::Subscription"
+      Properties:
+        Protocol: "email"
+        TopicArn:
+          Ref: "createProductTopic"
+        FilterPolicy:
+          price:
+            - "numeric":
+                - "<="
+                - 500
+        FilterPolicyScope: "MessageAttributes"
+        Endpoint: "kosxsem@gmail.com"

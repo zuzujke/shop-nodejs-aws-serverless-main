@@ -20,6 +20,10 @@ provider:
         - "s3:*"
       Resource:
         - "arn:aws:s3:::import-service-uploads/*"
+    - Effect: "Allow"
+      Action:
+      - "sqs:*"
+      Resource: "arn:aws:sqs:eu-west-1:958195610435:catalogItemsQueue"
 
 plugins:
   - serverless-webpack
@@ -35,6 +39,7 @@ functions:
     handler: handler.importProductsFile
     environment:
       BUCKET: "import-service-uploads"
+      SQS_QUEUE_URL: "https://sqs.eu-west-1.amazonaws.com/958195610435/catalogItemsQueue"
     events:
       - http:
           path: import

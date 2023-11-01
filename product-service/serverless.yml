@@ -107,27 +107,20 @@ resources:
       Type: "AWS::SQS::Queue"
       Properties:
         QueueName: catalogItemsQueue
-
-    CatalogBatchProcessQueuePolicy:
-      Type: "AWS::SQS::QueuePolicy"
+    createProductTopic:
+      Type: "AWS::SNS::Topic"
       Properties:
-        PolicyDocument:
-          Version: "2012-10-17"
-          Statement:
-            - Effect: "Allow"
-              Principal:
-                Service:
-                  AWS: "*"
-              Action: "sqs:*"
-              Resource:
-                Fn::GetAtt:
-                  - CatalogItemsQueue
-                  - Arn
-              Condition:
-                ArnEquals:
-                  aws:SourceArn:
-                    Fn::GetAtt:
-                      - CatalogItemsQueue
-                      - Arn
-        Queues:
-          - !GetAtt CatalogItemsQueue.Arn
+        TopicName: "create-product-topic"
+    createProductTopicSubscription:
+      Type: "AWS::SNS::Subscription"
+      Properties:
+        Protocol: "email"
+        TopicArn:
+          Ref: "createProductTopic"
+        FilterPolicy:
+          price:
+            - "numeric":
+                - "<="
+                - 500
+        FilterPolicyScope: "MessageAttributes"
+        Endpoint: "kosxsem@gmail.com"

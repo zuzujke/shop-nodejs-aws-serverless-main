@@ -14,7 +14,7 @@ provider:
         - "s3:GetObject"
         - "s3:PutObject"
       Resource:
-        - "arn:aws:s3:::import-service-csv-uploaded"
+        - "arn:aws:s3:::import-service-uploads"
     - Effect: "Allow"
       Action:
         - "s3:*"

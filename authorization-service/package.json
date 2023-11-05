@@ -1,0 +1,17 @@
+{
+  "name": "authorization-service",
+  "version": "1.0.0",
+  "description": "Authorization Service for AWS",
+  "scripts": {
+    "package-build": "sls package",
+    "deploy:dev": "sls deploy --stage dev"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1146.0"
+  },
+  "devDependencies": {
+    "serverless": "^3.0.0",
+    "serverless-dotenv-plugin": "^6.0.0",
+    "serverless-offline": "^13.2.0"
+  }
+}

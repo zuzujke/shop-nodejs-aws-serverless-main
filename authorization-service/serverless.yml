@@ -1,0 +1,14 @@
+service: authorization-service
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-west-1
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
+plugins:
+  - serverless-offline
+  - serverless-dotenv-plugin
+custom:
+  serverless-offline:
+    httpPort: 3000

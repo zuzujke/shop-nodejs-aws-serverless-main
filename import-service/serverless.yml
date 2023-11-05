@@ -44,6 +44,9 @@ functions:
       - http:
           path: import
           method: get
+          authorizer:
+            name: basicAuthorizer
+            arn: "arn:aws:lambda:eu-west-1:958195610435:function:authorization-service-dev-basicAuthorizer"
           cors: true
           request:
             parameters:
